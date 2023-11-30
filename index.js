@@ -30,7 +30,6 @@ app.post('/produtos', async (req, res) => {
     const produto = await ProdutoModel.create({
         quantidade: req.body.quantidade,
         cor: req.body.cor,
-        data: req.body.data,
         status: req.body.status
     });
     return res.status(201).json([produto]);

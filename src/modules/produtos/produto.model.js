@@ -4,9 +4,7 @@ const {Schema} = mongoose;
 const produtoSchema = new Schema({
     quantidade: Number,
     cor: String,
-    data: Date,
     status: String
-    
 },
 {timestemps: true}
 );
