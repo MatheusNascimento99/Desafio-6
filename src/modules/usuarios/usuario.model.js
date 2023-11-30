@@ -7,6 +7,7 @@ const usuarioSchema = new Schema({
     cpf: Number,
     email: String,
     telefone: Number,
+    senha: String,
 },
 {timestemps: true}
 );
