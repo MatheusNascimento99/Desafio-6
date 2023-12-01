@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 const UsuarioModel = require('./src/modules/usuarios/usuario.model');
 const conectBD = require('./src/config/mongo');
 const ProdutoModel = require('./src/modules/produtos/produto.model');
+const PedidoModel = require('./src/modules/pedidos/pedido.model');
+const VendaModel = require('./src/modules/vendas/venda.model');
 
 // CADASTRAR USUÁRIOS
 app.post('/usuarios', async (req, res) => {
@@ -59,7 +61,31 @@ app.get('/produtos', async (req, res) => {
 }); 
 
 
+//REGISTRO pedidos
 
+app.post('/pedidos', async (req, res) =>{
+    const pedido = await PedidoModel.create({
+        nome: req.body.nome,
+        quantidade: req.body.quantidade,
+        cor: req.body.cor,
+        status: req.body.status,
+        data_pedido: req.body.data_pedido,
+        clienteId: req.body.clienteId,
+        produtoId: req.body.produtoId,
+        valor_total:req.body.valor_total
+    });
+    return res.status(200).json([pedido]);
+})
+
+//tabela de vendas ja feita so fazer a rota e colocar schemavenda
+
+app.post('/vendas', async (req, res) => {
+    const vendas = await VendaModel.creat({
+        clienteId: req.body.clienteId,
+        produtoId: req.body.produtoId,
+    });
+    return res.status(200).json([vendas]);
+})
 
 
 app.listen(9999, () => {
