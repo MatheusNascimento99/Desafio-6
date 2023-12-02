@@ -86,44 +86,90 @@ app.put('/produtos/:id', async (req, res) => {
 //CADASTRAR PEDIDOSS
 
 app.post('/pedidos', async (req, res) =>{
-    const pedido = await PedidoModel.create({
-        nome: req.body.nome,
-        quantidade: req.body.quantidade,
-        cor: req.body.cor,
-        status: req.body.status,
-        data_pedido: req.body.data_pedido,
-        clienteId: req.body.clienteId,
-        produtoId: req.body.produtoId,
-        valor_total:req.body.valor_total
-    });
-    return res.status(200).json([pedido]);
+    try {
+        const quantPedido = req.body.quantidade;
+        const {clienteId, produtoId} = req.body;
+        const usuario = await UsuarioModel.findById(clienteId);
+        const produto = await ProdutoModel.findById(produtoId);
+        
+
+        if(! clienteId){
+            return res.status(404).json({mensagem: 'Usuário não encontrado, realize o login!'});
+        }
+        if (! produtoId){
+            return res.status(404).json({mensagem: 'Produto não encontrado!'});
+        }   
+        if (produto.quantidade < quantPedido){
+            return res.status(404).json({mensagem: 'Produto esgotado!'});
+        }  
+
+        const pedido = await PedidoModel.create({
+            nome: req.body.nome,
+            quantidade: req.body.quantidade,
+            cor: req.body.cor,
+            status: req.body.status,
+            data_pedido: req.body.data_pedido,
+            clienteId: req.body.clienteId,
+            produtoId: req.body.produtoId,
+            valor_total:req.body.valor_total
+        });
+        return res.status(200).json([pedido]);
+    } catch (error) {
+        return res.status(500).json({mensagem: 'Erro no servidor.'});
+    }
+    
 })
 
 // LISTAR PEDIDOS
 app.get('/pedidos', async (req, res) => {
-    const listaPedido = await PedidoModel.find();
+    try {
+        const listaPedido = await PedidoModel.find();
     return res.status(200).json([listaPedido]);
+    } catch (error) {
+        return res.status(500).json({mensagem: 'Erro no servidor.'});
+    }
+    
 })
 
 //CADASTRAR VENDAS
 
 app.post('/vendas', async (req, res) => {
-    const vendas = await VendaModel.create({
-        clienteId: req.body.clienteId,
-        produtoId: req.body.produtoId,
-        valor_total: req.body.produtoId,
-        entrega_retirada: req.body.entrega_retirada,
-        pgto: req.body.pgto,
-        data_venda:req.body.data_venda,
-        status:req.body.status
-    });
-    return res.status(200).json(vendas);
+    try{
+        const {clienteId, produtoId} = req.body;
+        const usuario = await UsuarioModel.findById(clienteId);
+        const produto = await ProdutoModel.findById(produtoId);
+
+        if (!usuario || !produto){
+            return res.status(404).json({mensagem: 'Usuário ou produto não encontrado! '})
+        }
+
+        const vendas = await VendaModel.create({
+            clienteId: req.body.clienteId,
+            produtoId: req.body.produtoId,
+            valor_total: req.body.produtoId,
+            entrega_retirada: req.body.entrega_retirada,
+            pgto: req.body.pgto,
+            data_venda:req.body.data_venda,
+            status:req.body.status
+        });
+        return res.status(201).json({mensagem: 'Venda realizada com sucesso!', vendas});
+    } 
+    
+    catch (error){
+        return res.status(500).json({mensagem:'Erro no servidor.'});
+    }
+    
 })
 
 // LISTAR VENDAS
 app.get('/vendas', async (req, res) => {
-    const vendasLista = await VendaModel.find();
-    return res.status(200).json(vendasLista)
+    try {
+        const vendasLista = await VendaModel.find();
+        return res.status(200).json(vendasLista)
+    } catch (error) {
+        return  res.status(500).json ({mensagem: 'Erro no servidor.'});
+    } 
+    
 });
 
 // AJUSTAR ITENS DAS MODELS E DAS REQUISIÇÕES
