@@ -41,27 +41,49 @@ app.get('/usuarios', async (req, res) => {
     
 }); 
 
-// CADASTRAR PRODUTOS
+// CADASTRAR PRODUTOS / ESTOQUE
 app.post('/produtos', async (req, res) => {
   
     const produto = await ProdutoModel.create({
         nome: req.body.nome,
         quantidade: req.body.quantidade,
         cor: req.body.cor,
-        status: req.body.status
+        status_entrega: req.body.status,
+        valor: req.body.valor
     });
     return res.status(201).json([produto]);
 });
 
 
-//LISTAR PRODUTOS
+//LISTAR PRODUTOS / ESTOQUE
 app.get('/produtos', async (req, res) => {
     const produtos = await ProdutoModel.find();
     return res.status(200).json([produtos]);
 }); 
 
 
-//REGISTRO pedidos
+//ATUALIZAR PRODUTOS / ESTOQUE
+app.put('/produtos/:id', async (req, res) => {
+    try{
+        const produtoId = req.params.id;
+        let {nome, quantidade, cor, status_entrega, valor} = req.body;
+        const atualizarEstoque = await ProdutoModel.updateOne({ _id: produtoId}, {
+        nome,
+        quantidade,
+        cor,
+        status_entrega,
+        valor,
+    })
+        res.status(200).json({menssagem: 'Informação atualizada!', atualizarEstoque});
+    
+    
+    } 
+    catch (error) {
+        res.status(500).json({ mensagem:'Falha ao atualizar informações, tente novamente!' }); 
+    }
+})
+
+//CADASTRAR PEDIDOSS
 
 app.post('/pedidos', async (req, res) =>{
     const pedido = await PedidoModel.create({
@@ -77,16 +99,28 @@ app.post('/pedidos', async (req, res) =>{
     return res.status(200).json([pedido]);
 })
 
-//tabela de vendas ja feita so fazer a rota e colocar schemavenda
+// LISTAR VENDAS
+app.get('/vendas', async (req, res) => {
+    const pedidos = await PedidoModel.find();
+    return res.status(200).json([pedidos])
+});
+
+//CADASTRAR VENDAS
 
 app.post('/vendas', async (req, res) => {
-    const vendas = await VendaModel.creat({
+    const vendas = await VendaModel.create({
         clienteId: req.body.clienteId,
         produtoId: req.body.produtoId,
+        valor_total: req.body.produtoId,
+        entrega_retirada: req.body.entrega_retirada,
+        pgto: req.body.pgto,
+        data_venda:req.body.data_venda,
+        status:req.body.status
     });
     return res.status(200).json([vendas]);
 })
 
+// LISTAR VENDAS
 
 app.listen(9999, () => {
     console.log('Servidor operacional na porta 9999 !');

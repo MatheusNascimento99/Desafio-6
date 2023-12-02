@@ -5,7 +5,8 @@ const produtoSchema = new Schema({
     nome: String,
     quantidade: Number,
     cor: String,
-    status: String
+    status_entrega: String,
+    valor: String
 },
 {timestemps: true}
 );
