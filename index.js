@@ -99,11 +99,11 @@ app.post('/pedidos', async (req, res) =>{
     return res.status(200).json([pedido]);
 })
 
-// LISTAR VENDAS
-app.get('/vendas', async (req, res) => {
-    const pedidos = await PedidoModel.find();
-    return res.status(200).json([pedidos])
-});
+// LISTAR PEDIDOS
+app.get('/pedidos', async (req, res) => {
+    const listaPedido = await PedidoModel.find();
+    return res.status(200).json([listaPedido]);
+})
 
 //CADASTRAR VENDAS
 
@@ -117,10 +117,16 @@ app.post('/vendas', async (req, res) => {
         data_venda:req.body.data_venda,
         status:req.body.status
     });
-    return res.status(200).json([vendas]);
+    return res.status(200).json(vendas);
 })
 
 // LISTAR VENDAS
+app.get('/vendas', async (req, res) => {
+    const vendasLista = await VendaModel.find();
+    return res.status(200).json(vendasLista)
+});
+
+// AJUSTAR ITENS DAS MODELS E DAS REQUISIÇÕES
 
 app.listen(9999, () => {
     console.log('Servidor operacional na porta 9999 !');
