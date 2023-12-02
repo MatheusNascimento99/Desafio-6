@@ -1,15 +1,18 @@
 const { stripVTControlCharacters } = require('util');
 const mongoose = require('../../config/mongo');
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
 const usuarioSchema = new Schema({
     nome: String,
-    cpf: Number,
+    cpf: String,
     email: String,
-    telefone: Number,
     senha: String,
+    telefone: String,
+    endereco: String,
+    observacao: String
+
 },
-{timestemps: true}
+    { timestemps: true }
 );
 
 const UsuarioModel = mongoose.model('usuarios', usuarioSchema);

@@ -1,14 +1,14 @@
 const mongoose = require('../../config/mongo');
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
 const produtoSchema = new Schema({
     nome: String,
-    quantidade: Number,
+    disponibilidade: Number,
     cor: String,
-    status_entrega: String,
+    descricao: String,
     valor: String
 },
-{timestemps: true}
+    { timestemps: true }
 );
 
 const ProdutoModel = mongoose.model('produto', produtoSchema);

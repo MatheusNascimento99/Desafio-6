@@ -1,17 +1,16 @@
 const mongoose = require('../../config/mongo');
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
 const vendaSchema = new Schema({
+    clienteId: String,
+    produtoId: String,
     valor_total: String,
     entrega_retirada: String,
     pgto: String,
     data_venda: String,
-    status:String,
-    clienteId: String,
-    produtoId: String,
-
+    informacaoGeral: String,
 },
-{timestemps: true}
+    { timestemps: true }
 );
 
 const VendaModel = mongoose.model('vendas', vendaSchema);

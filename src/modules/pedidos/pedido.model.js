@@ -1,17 +1,16 @@
 const mongoose = require('../../config/mongo');
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
 const pedidoSchema = new Schema({
-    nome:String,
-    quantidade: String,
+    nomeProduto: String,
+    quantidade: Number,
     cor: String,
-    status:String,
     clienteId: String,
-    produtoId: String,
-    data_pedido: String,
-    valor_total: String
+    pedidoId: String,
+    dataPedido: String,
+    observacao: String
 },
-{timestemps: true}
+    { timestemps: true }
 );
 
 const PedidoModel = mongoose.model('pedidos', pedidoSchema);
